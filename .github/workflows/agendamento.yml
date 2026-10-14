@@ -1,0 +1,40 @@
+name: Registro de Ponto Tangerino / Sólides
+
+on:
+  schedule:
+    # Horários ajustados do fuso BRT (UTC-3) para UTC:
+    - cron: '30 11 * * 1-5'  # Entrada: 08:30 BRT (11:30 UTC)
+    - cron: '0 16 * * 1-5'   # Almoço: 13:00 BRT (16:00 UTC)
+    - cron: '0 17 * * 1-5'   # Volta Almoço: 14:00 BRT (17:00 UTC)
+    - cron: '18 21 * * 1-5'  # Saída: 18:18 BRT (21:18 UTC)
+  workflow_dispatch:        # Permite executar manualmente pelo painel do GitHub para testes
+
+jobs:
+  ponto:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Baixar Código
+        uses: actions/checkout@v4
+
+      - name: Configurar Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+
+      - name: Instalar Dependências e Navegador
+        run: |
+          pip install playwright
+          playwright install --with-deps chromium
+
+      - name: Executar Registro de Ponto
+        env:
+          SOLIDES_COMPANY_CODE: ${{ secrets.SOLIDES_COMPANY_CODE }}
+          SOLIDES_PIN: ${{ secrets.SOLIDES_PIN }}
+        run: python bater_ponto.py
+
+      - name: Salvar Comprovante (Print)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: comprovante-ponto-${{ github.run_id }}
+          path: comprovante_ponto.png
