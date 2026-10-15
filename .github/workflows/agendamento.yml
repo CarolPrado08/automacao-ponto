@@ -2,12 +2,12 @@ name: Registro de Ponto Tangerino / Sólides
 
 on:
   schedule:
-    # Horários ajustados do fuso BRT (UTC-3) para UTC:
-    - cron: '30 11 * * 1-5'  # Entrada: 08:30 BRT (11:30 UTC)
-    - cron: '0 16 * * 1-5'   # Almoço: 13:00 BRT (16:00 UTC)
-    - cron: '0 17 * * 1-5'   # Volta Almoço: 14:00 BRT (17:00 UTC)
-    - cron: '18 21 * * 1-5'  # Saída: 18:18 BRT (21:18 UTC)
-  workflow_dispatch:        # Permite executar manualmente pelo painel do GitHub para testes
+    # Horários convertidos de BRT (UTC-3) para UTC:
+    - cron: '30 11 * * 1-5'  # Entrada: 08:30 BRT
+    - cron: '0 16 * * 1-5'   # Almoço: 13:00 BRT
+    - cron: '0 17 * * 1-5'   # Volta Almoço: 14:00 BRT
+    - cron: '18 21 * * 1-5'  # Saída: 18:18 BRT
+  workflow_dispatch:        # Permite rodar manualmente para testes
 
 jobs:
   ponto:
