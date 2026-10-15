@@ -2,16 +2,19 @@ name: Registro de Ponto Tangerino / Sólides
 
 on:
   schedule:
-    # Horários convertidos de BRT (UTC-3) para UTC:
+    # Horários UTC calibrados para o fuso do Brasil (UTC-3):
     - cron: '30 11 * * 1-5'  # Entrada: 08:30 BRT
     - cron: '0 16 * * 1-5'   # Almoço: 13:00 BRT
     - cron: '0 17 * * 1-5'   # Volta Almoço: 14:00 BRT
     - cron: '18 21 * * 1-5'  # Saída: 18:18 BRT
-  workflow_dispatch:        # Permite rodar manualmente para testes
+  workflow_dispatch:
 
 jobs:
   ponto:
     runs-on: ubuntu-latest
+    # Define formalmente o fuso horário do ambiente como America/Sao_Paulo
+    env:
+      TZ: "America/Sao_Paulo"
     steps:
       - name: Baixar Código
         uses: actions/checkout@v4
