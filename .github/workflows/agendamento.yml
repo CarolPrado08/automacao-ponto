@@ -1,7 +1,7 @@
 name: Registro de Ponto Tangerino / Sólides
 
 on:
-  workflow_dispatch:        # Disparado via API do Cron-job.org ou manualmente
+  workflow_dispatch:
 
 jobs:
   ponto:
@@ -17,10 +17,18 @@ jobs:
         with:
           python-version: '3.10'
 
-      - name: Instalar Dependências e Navegador
+      - name: Cache do Playwright Browsers
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: ${{ runner.os }}-playwright-${{ hashFiles('**/requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-playwright-
+
+      - name: Instalar Dependências
         run: |
           pip install playwright
-          playwright install --with-deps chromium
+          playwright install chromium
 
       - name: Executar Registro de Ponto
         env:
